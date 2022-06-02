@@ -15,10 +15,8 @@ use Illuminate\Tests\Integration\Database\DatabaseTestCase;
 
 class EloquentBelongsToManyTest extends DatabaseTestCase
 {
-    protected function setUp(): void
+    protected function defineDatabaseMigrationsAfterDatabaseRefreshed()
     {
-        parent::setUp();
-
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('uuid');
@@ -40,6 +38,7 @@ class EloquentBelongsToManyTest extends DatabaseTestCase
         });
 
         Schema::create('users_posts', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('user_uuid');
             $table->string('post_uuid');
             $table->tinyInteger('is_draft')->default(1);
@@ -53,8 +52,6 @@ class EloquentBelongsToManyTest extends DatabaseTestCase
             $table->string('flag')->default('')->nullable();
             $table->timestamps();
         });
-
-        Carbon::setTestNow(null);
     }
 
     public function testBasicCreateAndRetrieve()
@@ -936,6 +933,33 @@ class EloquentBelongsToManyTest extends DatabaseTestCase
         $relationTag2 = $post->tagsWithCustomExtraPivot()->orderByPivot('flag', 'desc')->first();
         $this->assertEquals($relationTag2->getAttributes(), $tag3->getAttributes());
     }
+
+    public function testFirstOrMethod()
+    {
+        $user1 = User::create(['name' => Str::random()]);
+        $user2 = User::create(['name' => Str::random()]);
+        $user3 = User::create(['name' => Str::random()]);
+        $post1 = Post::create(['title' => Str::random()]);
+        $post2 = Post::create(['title' => Str::random()]);
+        $post3 = Post::create(['title' => Str::random()]);
+
+        $user1->posts()->sync([$post1->uuid, $post2->uuid]);
+        $user2->posts()->sync([$post1->uuid, $post2->uuid]);
+
+        $this->assertEquals(
+            $post1->id,
+            $user2->posts()->firstOr(function () {
+                return Post::create(['title' => Str::random()]);
+            })->id
+        );
+
+        $this->assertEquals(
+            $post3->id,
+            $user3->posts()->firstOr(function () use ($post3) {
+                return $post3;
+            })->id
+        );
+    }
 }
 
 class User extends Model
@@ -951,6 +975,13 @@ class User extends Model
         static::creating(function ($model) {
             $model->setAttribute('uuid', Str::random());
         });
+    }
+
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class, 'users_posts', 'user_uuid', 'post_uuid', 'uuid', 'uuid')
+            ->withPivot('is_draft')
+            ->withTimestamps();
     }
 
     public function postsWithCustomPivot()
@@ -976,6 +1007,13 @@ class Post extends Model
         static::creating(function ($model) {
             $model->setAttribute('uuid', Str::random());
         });
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'users_posts', 'post_uuid', 'user_uuid', 'uuid', 'uuid')
+            ->withPivot('is_draft')
+            ->withTimestamps();
     }
 
     public function tags()

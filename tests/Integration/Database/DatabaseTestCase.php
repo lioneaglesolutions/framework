@@ -2,10 +2,13 @@
 
 namespace Illuminate\Tests\Integration\Database;
 
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Orchestra\Testbench\TestCase;
 
 abstract class DatabaseTestCase extends TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * The current database driver.
      *
@@ -13,29 +16,21 @@ abstract class DatabaseTestCase extends TestCase
      */
     protected $driver;
 
+    protected function setUp(): void
+    {
+        $this->beforeApplicationDestroyed(function () {
+            foreach (array_keys($this->app['db']->getConnections()) as $name) {
+                $this->app['db']->purge($name);
+            }
+        });
+
+        parent::setUp();
+    }
+
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
-
-        if (! env('DB_CONNECTION')) {
-            $app['config']->set('database.default', 'testbench');
-        }
-
         $connection = $app['config']->get('database.default');
 
         $this->driver = $app['config']->get("database.connections.$connection.driver");
-    }
-
-    protected function tearDown(): void
-    {
-        if ($this->app['config']->get('database.default') !== 'testbench') {
-            $this->artisan('db:wipe', ['--drop-views' => true]);
-        }
-
-        parent::tearDown();
     }
 }
