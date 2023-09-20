@@ -1,6 +1,97 @@
 # Release Notes for 8.x
 
-## [Unreleased](https://github.com/laravel/framework/compare/v8.83.15...8.x)
+## [Unreleased](https://github.com/laravel/framework/compare/v8.83.27...8.x)
+
+
+## [v8.83.27 (2022-12-08)](https://github.com/laravel/framework/compare/v8.83.26...v8.83.27)
+
+### Fixed
+- Fixed email verification request ([#45227](https://github.com/laravel/framework/pull/45227))
+
+
+## [v8.83.26 (2022-11-01)](https://github.com/laravel/framework/compare/v8.83.25...v8.83.26)
+
+### Fixed
+- Fixes controller computed middleware ([#44454](https://github.com/laravel/framework/pull/44454))
+
+
+## [v8.83.25 (2022-09-30)](https://github.com/laravel/framework/compare/v8.83.24...v8.83.25)
+
+### Added
+- Added `Illuminate/Routing/Route::flushController()` ([#44393](https://github.com/laravel/framework/pull/44393))
+
+
+## [v8.83.24 (2022-09-22)](https://github.com/laravel/framework/compare/v8.83.23...v8.83.24)
+
+### Fixed
+- Avoid Passing null to parameter exception on PHP 8.1 ([#43951](https://github.com/laravel/framework/pull/43951))
+
+### Changed
+- Patch for timeless timing attack vulnerability in user login ([#44069](https://github.com/laravel/framework/pull/44069))
+
+
+## [v8.83.23 (2022-07-26)](https://github.com/laravel/framework/compare/v8.83.22...v8.83.23)
+
+### Fixed
+- Fix DynamoDB locks with 0 seconds duration ([#43365](https://github.com/laravel/framework/pull/43365))
+
+
+## [v8.83.22 (2022-07-22)](https://github.com/laravel/framework/compare/v8.83.21...v8.83.22)
+
+### Revert
+- Revert ["Protect against ambiguous columns"](https://github.com/laravel/framework/pull/43278) ([#43362](https://github.com/laravel/framework/pull/43362))
+
+
+## [v8.83.21 (2022-07-21)](https://github.com/laravel/framework/compare/v8.83.20...v8.83.21)
+
+### Revert
+- Revert of ["Prevent double throwing chained exception on sync queue"](https://github.com/laravel/framework/pull/42950) ([#43354](https://github.com/laravel/framework/pull/43354))
+
+
+## [v8.83.20 (2022-07-19)](https://github.com/laravel/framework/compare/v8.83.19...v8.83.20)
+
+### Fixed
+- Fixed transaction attempts counter for sqlsrv ([#43176](https://github.com/laravel/framework/pull/43176))
+
+### Changed
+- Clear Facade resolvedInstances in queue worker resetScope callback ([#43215](https://github.com/laravel/framework/pull/43215))
+- Protect against ambiguous columns ([#43278](https://github.com/laravel/framework/pull/43278))
+
+
+## [v8.83.19 (2022-07-13)](https://github.com/laravel/framework/compare/v8.83.18...v8.83.19)
+
+### Fixed
+- Fixed forceCreate on MorphMany not returning newly created object ([#42996](https://github.com/laravel/framework/pull/42996))
+- Prevent double throwing chained exception on sync queue ([#42950](https://github.com/laravel/framework/pull/42950))
+
+### Changed
+- Disable Column Statistics for php artisan schema:dump on MariaDB ([#43027](https://github.com/laravel/framework/pull/43027))
+
+
+## [v8.83.18 (2022-06-28)](https://github.com/laravel/framework/compare/v8.83.17...v8.83.18)
+
+### Fixed
+- Fixed bug on forceCreate on a MorphMay relationship not including morph type ([#42929](https://github.com/laravel/framework/pull/42929))
+- Handle cursor paginator when no items are found ([#42963](https://github.com/laravel/framework/pull/42963))
+- Fixed Str::Mask() for repeating chars ([#42956](https://github.com/laravel/framework/pull/42956))
+
+
+## [v8.83.17 (2022-06-21)](https://github.com/laravel/framework/compare/v8.83.16...v8.83.17)
+
+### Added
+- Apply where's from union query builder in cursor pagination ([#42651](https://github.com/laravel/framework/pull/42651))
+- Handle collection creation around a single enum ([#42839](https://github.com/laravel/framework/pull/42839))
+
+### Fixed
+- Fixed Request offsetExists without routeResolver ([#42754](https://github.com/laravel/framework/pull/42754))
+- Fixed: Loose comparison causes the value not to be saved ([#42793](https://github.com/laravel/framework/pull/42793))
+
+
+## [v8.83.16 (2022-06-07)](https://github.com/laravel/framework/compare/v8.83.15...v8.83.16)
+
+### Fixed
+- Free reserved memory before handling fatal errors ([#42630](https://github.com/laravel/framework/pull/42630), [#42646](https://github.com/laravel/framework/pull/42646))
+- Prevent $mailer being reset when testing mailables that implement ShouldQueue ([#42695](https://github.com/laravel/framework/pull/42695))
 
 
 ## [v8.83.15 (2022-05-31)](https://github.com/laravel/framework/compare/v8.83.14...v8.83.15)

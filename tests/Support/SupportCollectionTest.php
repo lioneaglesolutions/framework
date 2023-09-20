@@ -24,6 +24,10 @@ use stdClass;
 use Symfony\Component\VarDumper\VarDumper;
 use UnexpectedValueException;
 
+if (PHP_VERSION_ID >= 80100) {
+    include_once 'Enums.php';
+}
+
 class SupportCollectionTest extends TestCase
 {
     /**
@@ -4256,6 +4260,28 @@ class SupportCollectionTest extends TestCase
 
     /**
      * @dataProvider collectionClassProvider
+     *
+     * @requires PHP >= 8.1
+     */
+    public function testCollectionFromEnum($collection)
+    {
+        $data = new $collection(TestEnum::A);
+        $this->assertEquals([TestEnum::A], $data->toArray());
+    }
+
+    /**
+     * @dataProvider collectionClassProvider
+     *
+     * @requires PHP >= 8.1
+     */
+    public function testCollectionFromBackedEnum($collection)
+    {
+        $data = new $collection(TestBackedEnum::A);
+        $this->assertEquals([TestBackedEnum::A], $data->toArray());
+    }
+
+    /**
+     * @dataProvider collectionClassProvider
      */
     public function testSplitCollectionWithADivisableCount($collection)
     {
@@ -4320,7 +4346,7 @@ class SupportCollectionTest extends TestCase
             $data->split(3)->map(function (Collection $chunk) {
                 return $chunk->values()->toArray();
             })->toArray()
-            );
+        );
     }
 
     /**
@@ -4335,7 +4361,7 @@ class SupportCollectionTest extends TestCase
             $data->split(3)->map(function (Collection $chunk) {
                 return $chunk->values()->toArray();
             })->toArray()
-            );
+        );
     }
 
     /**
@@ -4350,7 +4376,7 @@ class SupportCollectionTest extends TestCase
             $data->split(6)->map(function (Collection $chunk) {
                 return $chunk->values()->toArray();
             })->toArray()
-            );
+        );
     }
 
     /**
