@@ -1131,10 +1131,6 @@ class MailMailableTest extends TestCase
         $mailable->assertHasAttachmentFromStorage('/path/to/foo.jpg');
     }
 
-    public function testAssertHasSubject()
-    {
-    }
-
     public function testMailableHeadersGetSent()
     {
         $view = m::mock(Factory::class);
